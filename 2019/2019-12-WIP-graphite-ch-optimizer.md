@@ -43,7 +43,7 @@ ClickHouse хорошо решает описанные проблемы. Нап
 
 ### Информация в системных таблицах ClickHouse
 
-Взглянем на структуру таблицы [system.parts](https://clickhouse.yandex/docs/ru/operations/system_tables/#system_tables-parts). Это исчерпывающая информация о каждом куске всех таблиц на сервере ClickHouse. И здесь имеются, в том числе, следующие столбцы:
+Взглянем на структуру таблицы [system.parts](https://clickhouse.yandex/docs/ru/operations/system_tables/#system_tables-parts). Это исчерпывающая информация о каждом куске всех таблиц на сервере ClickHouse. Содержит, в том числе, следующие столбцы:
 
 * Имя БД (`database`)
 * Имя таблицы (`table`)
@@ -51,14 +51,12 @@ ClickHouse хорошо решает описанные проблемы. Нап
 * Когда кусок был создан (`modification_time`)
 * Минимальная и максимальная дата в куске (партиционирование идёт по дням) (`min_date` & `max_date`)
 
-Также имеется таблица [system.graphite_retentions](https://clickhouse.yandex/docs/ru/operations/system_tables/#system-graphite-retentions), со следующими интересными полями:
+Также есть таблица [system.graphite_retentions](https://clickhouse.yandex/docs/ru/operations/system_tables/#system-graphite-retentions), со следующими интересными полями:
 
 * Имя БД (`Tables.database`)
 * Имя таблицы (`Tables.table`)
 * Возраст метрики, когда должна быть применена следующая агрегация (`age`)
 
-Внимательному читателю всё уже понятно и, наверное, дальше читать уже скучно, для меня же эта задачка была первой пробой джойнов и отчаянной попыткой в конце концов разобраться в них.  
-В ретроспективе всё кажется элементарным, на разработку же запроса было потрачено несколько литров пива и несколько админо-дней совместно с @v0devil, за что я ему безумно благодарен.
 
 Итак:
 
