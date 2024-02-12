@@ -14,8 +14,8 @@
 5. Create LVM volume on top of LUKS:
     - `pvcreate /dev/mapper/crypted`
     - `vgcreate cLVM /dev/mapper/crypted`
-    - `lvcreate -L 50G cLVM root`
-    - `lvcreate -L ${100% - root - 10%} cLVM local` - leave something for the future
+    - `lvcreate -L 50G cLVM -n root`
+    - `lvcreate -L ${100% - root - 10%} cLVM -n local` - leave something for the future
 6. Format partitions and volumes:
     - boot: `mkfs.fat -F 32 /dev/sdxY`
     - root: `mkfs.xfs /dev/cLVM/root`
@@ -33,6 +33,7 @@
     - `arch-chroot /mnt`
     - `ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime`
     - `hwclock --systohc`
+    - `systemctl enable systemd-timesyncd.service`
     - for `locale-gen` should be the next `/etc/locale.gen`:
 
 ```
@@ -50,14 +51,29 @@ LANG=en_DK.UTF-8
 LC_TIME=en_IE.UTF-8
 ```
 
-11. User creation:
+    - `locale-gen`
+    - `/etc/hostname`
+    - fill `/etc/mkinitcpio.conf`:`HOOKS` and `/etc/kernel/cmdline`
+
+11. Pacman setup:
+    - `Color`
+    - `ParallelDownloads = 7`
+    - add `[community]` and `[multilib]`
+12. User creation:
     - `pacman -S docker cups smartmontools libfprint`
     - `useradd -m -G games,network,floppy,power,cups,docker,rfkill,users,video,uucp,storage,lp,wheel -s /bin/zsh felixoid`
     - `passwd felixoid`
 
-12. Install yay, `sbupdate-git`
+14. Install sbctl
+    - https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Assisted_process_with_sbctl
+    - https://wiki.archlinux.org/title/Unified_kernel_image#sbctl
 
-13. Install sbupdate, efibootmgr
+13. Install yay
+
+15. Post setup
+    - `systemctl enable fstrim.timer`
+    - `visudo` and uncomment `%wheel`
+    - set `-j$(numcpu)}` in `/etc/makepkg.conf`
 
 ## Later
 - TRIM
