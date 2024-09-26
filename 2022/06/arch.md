@@ -20,16 +20,18 @@
     - boot: `mkfs.fat -F 32 /dev/sdxY`
     - root: `mkfs.xfs /dev/cLVM/root`
     - local: `mkfs.xfs /dev/cLVM/local`
-7. Mount and create a directories tree:
+7. Connect to a network:
+    - iwctl: `iwctl`
+8. Mount and create a directories tree:
     - `mount /dev/cLVM/root /mnt`
     - `mount --mkdir /dev/sdxY /mnt/boot`
     - `mount --mkdir /dev/cLVM/local /mnt/srv/local`
     - `mkdir -p /mnt/srv/local/{home,var}`
     - `mount -o bind --mkdir /mnt/srv/local/home /mnt/home`
     - `mount -o bind --mkdir /mnt/srv/local/var /mnt/var`
-8. Install the system: `pacstrap /mnt base base-devel linux linux-firmware xfsprogs gvim lvm2 networkmanager zsh zsh-completions bash-completion sof-firmware`
-9. Generate fstab `genfstab -U /mnt >> /mnt/etc/fstab`
-10. Follow the [chroot](https://wiki.archlinux.org/title/Installation_guide#Chroot) manual.
+9. Install the system: `pacstrap /mnt base base-devel linux linux-firmware xfsprogs gvim lvm2 networkmanager zsh zsh-completions bash-completion sof-firmware`
+10. Generate fstab `genfstab /mnt >> /mnt/etc/fstab`
+11. Follow the [chroot](https://wiki.archlinux.org/title/Installation_guide#Chroot) manual.
     - `arch-chroot /mnt`
     - `ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime`
     - `hwclock --systohc`
@@ -53,24 +55,29 @@ LC_TIME=en_IE.UTF-8
 
     - `locale-gen`
     - `/etc/hostname`
-    - fill `/etc/mkinitcpio.conf`:`HOOKS` and `/etc/kernel/cmdline`
+    - fill `/etc/mkinitcpio.conf`:`HOOKS`:
+        - `HOOKS=(base udev autodetect microcode keyboard keymap consolefont modconf kms block encrypt lvm2 filesystems fsck)`
+    - and `/etc/kernel/cmdline`:
+        - To get the UUID: `lsblk -dno $DEVICE_USED_FOR_luksFormat`
+        - `echo "cryptdevice=UUID=$(lsblk -dno $DEVICE_USED_FOR_luksFormat):cLVM root=/dev/cLVM/root" > /etc/kernel/cmdline`
 
-11. Pacman setup:
+12. Pacman setup:
     - `Color`
     - `ParallelDownloads = 7`
     - add `[community]` and `[multilib]`
-12. User creation:
+13. User creation:
     - `pacman -S docker cups smartmontools libfprint`
     - `useradd -m -G games,network,floppy,power,cups,docker,rfkill,users,video,uucp,storage,lp,wheel -s /bin/zsh felixoid`
     - `passwd felixoid`
 
-14. Install sbctl
+15. Install sbctl
     - https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Assisted_process_with_sbctl
     - https://wiki.archlinux.org/title/Unified_kernel_image#sbctl
+    - `sbctl bundle --save /boot/EFI/Linux/Arch.efi --splash-img /usr/share/systemd/bootctl/splash-arch.bmp --kernel-img /boot/vmlinuz-linux --initramfs /boot/initramfs-linux.img --intelucode /boot/intel-ucode.img`
 
-13. Install yay
+16. Install yay
 
-15. Post setup
+17. Post setup
     - `systemctl enable fstrim.timer`
     - `visudo` and uncomment `%wheel`
     - set `-j$(numcpu)}` in `/etc/makepkg.conf`
