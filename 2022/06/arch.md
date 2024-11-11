@@ -31,7 +31,7 @@
     - `mount -o bind --mkdir /mnt/srv/local/var /mnt/var`
 9. Install the system: `pacstrap /mnt base base-devel linux linux-firmware xfsprogs gvim lvm2 networkmanager zsh zsh-completions bash-completion sof-firmware`
 10. Generate fstab `genfstab /mnt >> /mnt/etc/fstab`
-11. Follow the [chroot](https://wiki.archlinux.org/title/Installation_guide#Chroot) manual.
+11. Follow the [chroot](https://wiki.archlinux.org/title/Installation_guide#Chroot) manual:
     - `arch-chroot /mnt`
     - `ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime`
     - `hwclock --systohc`
@@ -74,6 +74,7 @@ LC_TIME=en_IE.UTF-8
     - https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Assisted_process_with_sbctl
     - https://wiki.archlinux.org/title/Unified_kernel_image#sbctl
     - `sbctl bundle --save /boot/EFI/Linux/Arch.efi --splash-img /usr/share/systemd/bootctl/splash-arch.bmp --kernel-img /boot/vmlinuz-linux --initramfs /boot/initramfs-linux.img --intelucode /boot/intel-ucode.img`
+    - `efibootmgr `
 
 16. Install yay
 
