@@ -73,7 +73,7 @@ LC_TIME=en_IE.UTF-8
 15. Install sbctl
     - https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Assisted_process_with_sbctl
     - https://wiki.archlinux.org/title/Unified_kernel_image#sbctl
-    - `sbctl bundle --save /boot/EFI/Linux/Arch.efi --splash-img /usr/share/systemd/bootctl/splash-arch.bmp --kernel-img /boot/vmlinuz-linux --initramfs /boot/initramfs-linux.img --intelucode /boot/intel-ucode.img`
+    - `sbctl bundle --save /boot/EFI/Linux/Arch.efi --splash-img /usr/share/systemd/bootctl/splash-arch.bmp --kernel-img /boot/vmlinuz-linux --initramfs /boot/initramfs-linux.img --amducode /boot/amd-ucode.img`
     - `efibootmgr `
 
 16. Install yay
